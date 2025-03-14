@@ -8,15 +8,11 @@ jobs:
       matrix:
         os: [windows-latest]
         build_type: [Release]
-        ui: [gui, cli]
-        scripting: [lua, noscripts]
-        exclude:
-          - build_type: Debug
-            ui: gui
-          - build_type: RelWithDebInfo
-            ui: cli
-          - build_type: RelWithDebInfo
-            scripting: noscripts
+        enable_ui: [on]
+        include:
+          - os: windows-lastest
+            bulid_type: Release
+            enable_ui: on
     steps:
     - uses: actions/checkout@v4
       with:
@@ -80,7 +76,7 @@ jobs:
         fi
         curl -L https://github.com/blueloveTH/aseprite/releases/download/v0.01/skia.zip --output skia.zip
         7z x skia.zip
-        cmake -S . -B build -G Ninja \
+         cmake -S . -B build -G Ninja \
           -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
           -DENABLE_UI=${{ matrix.enable_ui }} \
           -DENABLE_CCACHE=$enable_ccache \
@@ -92,10 +88,9 @@ jobs:
       shell: bash
       run: |
         cd build && ninja
-   
     - uses: actions/upload-artifact@v3
       with:
         name: aseprite
         path: |
-          D:/Tools/aseprite/aseprite/build/bin/data
-          D:/Tools/aseprite/aseprite/build/bin/aseprite.exe
+          D:/a/aseprite/aseprite/build/bin/data
+          D:/a/aseprite/aseprite/build/bin/aseprite.exe
